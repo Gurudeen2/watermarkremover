@@ -32,7 +32,7 @@ def removewatermark(request):
         imgCv2=cv2.imdecode(np.fromstring(imgs, np.uint8), 1)
         # imgCv2 = cv2.imread(imgs, 1)
         # print("get", imgCv2)
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(imgCv2, cv2.COLOR_BGR2GRAY)
         gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
                              cv2.THRESH_BINARY, 115, 1)
         cv2.imshow("Processed image", gray)
