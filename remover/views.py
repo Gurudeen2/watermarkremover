@@ -9,7 +9,7 @@ def removewatermark(request):
     if request.method == "POST":
 
         img = request.FILES["image"]
-        img = str(img)
+        # img = str(img)
         # watermark = WaterMarkRemove.objects.create(photo=img)
         # watermark.save()
 
@@ -19,8 +19,9 @@ def removewatermark(request):
         print("get", get_img)
         
         # img = "84455cover.jpg"
-        # print(img)
-        # img = cv2.imread(img, 1)
+        print("path",get_img.name)
+        # img = cv2.imread(get_img.name, 1)
         # _, thresh =cv2.threshold(img, 150, 255,cv2.THRESH_BINARY)
+        # print("thresh", thresh)
         # cv2.imshow("without watermark", thresh)
     return render(request, "page/home.html")
