@@ -35,86 +35,19 @@ def removewatermark(request):
 
         im = Image.open(get_img.path)
         width, height = im.size
+        text = Image.new("RGBA", im.size, (255, 255, 255, 0))
+
+        font = ImageFont.truetype("arial.ttf", 60)
+        txt = ImageDraw.Draw(text)
         draw = ImageDraw.Draw(im)
-        text = "Akeem Tolani"
-        font = ImageFont.truetype("arial.ttf", 30)
-        _, _, w, h, = draw.textbbox((0,0), text, font=font)
-
-        #cordinates for the text on the image
-        margin=10
-        x = width - w - margin
-        y = height - h - margin
-
-        #draw text on the image
-        draw.text((x,y), text, font=font)
-
+        _, _, w, h, = txt.textbbox((0,0), "Akeem Tolani", font=font)
+        draw.text(((width-w)/2, (height-h)/2), "Akeem Tolani",(255,255,255), font=font, )
+            # Combine the image with text watermark
+        # out = Image.alpha_composite(draw, txt)
         im.show()
-
-        im.save("w.png")
-
-        # im.show("Image")
-        # im.show("Titled")
-        # print(im)
-
         
-        # with Image.open(get_img.path) as img:
-        #     # get the height and width
-        #     width, height = img.size
-        #     # preparing d text watermark change the color in the lastparamter below
-        #     txt = Image.new("RGBA", img.size, (255, 255, 255, 0))
+      
+        im.save("ak.png")
 
-        #     # custom font
-        #     fnt = ImageFont.truetype("arial", 60)
-
-        #     # create image text
-
-        #     d = ImageDraw.Draw(txt)
-        
-        #     # get width hight of the text
-        #     _, _, w, h, = d.textbbox((0,0), "Akeem Tolani", font=fnt)
-
-        #     # write into center
-        #     d.text(((width-w)/2, (height-h)/2), "Akeem Tolani", font=fnt, fill=(255,255,255,255))
-
-        #     # img + text
-        #     result = Image.alpha_composite(get_img, txt)
-
-        #     result.save("r.png")
-        #     result.show()
-     
-        # font = ImageFont.load_default()
-        # draw = ImageDraw.Draw(photo)
-        # width, height = photo.size
-        # myword = "Fatai Akeem Tolani"
-        # margin = 10
-        # textwidth, textheight = draw.textlength(myword, font)
-        # x = width - textwidth - margin
-        # y = height - textheight - margin
-        # draw.text((x,y), myword, (255, 255, 255), font=font)
-        # photo.save(get_img.path)
-
-        # img = cv2.imread(get_img.name, 1)
-
-        # Load image as string from file/database
-        # im = open("media/84455cover.jpg", "rb")
-        # imgs = im.read()
-        # im.close()
-        # fd = open(im)
-        # img_str = fd.read()
-        # fd.close()
-        
-        
-        # img = "84455cover.jpg"
-        # print("path",get_img.name)
-        # imgCv2=cv2.imdecode(np.fromstring(imgs, np.uint8), 1)
-        # imgCv2 = cv2.imread(imgs, 1)
-        # print("get", imgCv2)
-        # gray = cv2.cvtColor(imgCv2, cv2.COLOR_BGR2GRAY)
-        # gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-        #                      cv2.THRESH_BINARY, 115, 1)
-        # cv2.imshow("Processed image", gray)
-        # _, thresh =cv2.threshold(imgCv2, 150, 255,cv2.THRESH_BINARY)
-        # print("thresh", thresh)
-        # cv2.imshow("without watermark", photo)
-        # cv2.waitKey(0)
+      
     return render(request, "page/home.html")
