@@ -31,33 +31,57 @@ def removewatermark(request):
         # get_img = WaterMarkRemove.objects.filter(photo=f"photo/{today}/{img}").first().photo
         get_img = WaterMarkRemove.objects.filter(photo=f"photo/2023/07/04/{img}").first().photo
         get_img2 = Image.open(get_img.path)
-        print(get_img2)
+        # print(get_img2)
+
+        im = Image.open(get_img.path)
+        width, height = im.size
+        draw = ImageDraw.Draw(im)
+        text = "Akeem Tolani"
+        font = ImageFont.truetype("arial.ttf", 30)
+        _, _, w, h, = draw.textbbox((0,0), text, font=font)
+
+        #cordinates for the text on the image
+        margin=10
+        x = width - w - margin
+        y = height - h - margin
+
+        #draw text on the image
+        draw.text((x,y), text, font=font)
+
+        im.show()
+
+        im.save("w.png")
+
+        # im.show("Image")
+        # im.show("Titled")
+        # print(im)
 
         
-        with Image.open(get_img.path) as img:
-            # get the height and width
-            width, height = img.size
-            # preparing d text watermark change the color in the lastparamter below
-            txt = Image.new("RGBA", img.size, (255, 255, 255, 0))
+        # with Image.open(get_img.path) as img:
+        #     # get the height and width
+        #     width, height = img.size
+        #     # preparing d text watermark change the color in the lastparamter below
+        #     txt = Image.new("RGBA", img.size, (255, 255, 255, 0))
 
-            # custom font
-            fnt = ImageFont.truetype("arial", 60)
+        #     # custom font
+        #     fnt = ImageFont.truetype("arial", 60)
 
-            # create image text
+        #     # create image text
 
-            d = ImageDraw.Draw(txt)
+        #     d = ImageDraw.Draw(txt)
         
-            # get width hight of the text
-            _, _, w, h, = d.textbbox((0,0), "Akeem Tolani", font=fnt)
+        #     # get width hight of the text
+        #     _, _, w, h, = d.textbbox((0,0), "Akeem Tolani", font=fnt)
 
-            # write into center
-            d.text(((width-w)/2, (height-h)/2), "Akeem Tolani", font=fnt, fill=(255,255,255,255))
+        #     # write into center
+        #     d.text(((width-w)/2, (height-h)/2), "Akeem Tolani", font=fnt, fill=(255,255,255,255))
 
-            # img + text
-            result = Image.alpha_composite(get_img, txt)
+        #     # img + text
+        #     result = Image.alpha_composite(get_img, txt)
 
-            result.save("r.png")
-            result.show()
+        #     result.save("r.png")
+        #     result.show()
+     
         # font = ImageFont.load_default()
         # draw = ImageDraw.Draw(photo)
         # width, height = photo.size
