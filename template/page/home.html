@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Watermark Remover</title>
-  </head>
-  <body>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <!-- <label></label> -->
-      <input type="file" name="image" required />
-      <input type="submit" value="Submit" />
-    </form>
-  </body>
-</html>
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} Home {% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <!-- <label></label> -->
+  <input type="file" name="image" required />
+  <input type="submit" value="Submit" />
+</form>
+{% endblock %}
