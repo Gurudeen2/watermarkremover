@@ -30,8 +30,9 @@ def removewatermark(request):
         today = date.today().strftime("%Y/%m/%d")
         # get_img = WaterMarkRemove.objects.filter(photo=f"photo/{today}/{img}").first().photo
         get_img = WaterMarkRemove.objects.filter(photo=f"photo/2023/07/04/{img}").first().photo
-        get_img2 = Image.open(get_img.path)
-        # print(get_img2)
+
+        
+        print(get_img.name)
 
         im = Image.open(get_img.path)
         width, height = im.size
