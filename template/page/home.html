@@ -1,7 +1,21 @@
 {% extends 'base.html' %} 
 {% load static %} 
-{% block title %} Home {% endblock %}
+{% block title %} Home {% endblock%} 
 {% block content %}
+<div id="homepage">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>
+          Welcome to Image Processing
+        </h3>
+        <span>
+          Remove your image background, add watermarks to your images for copyright sake
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <!-- <label></label> -->
