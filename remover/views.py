@@ -19,7 +19,13 @@ from PIL import Image, ImageDraw, ImageFont
 #         draw.text((x,y), myword, (255, 255, 255), font=font)
 #         photo.save(self.image.path)
 
-def removewatermark(request):
+def home(request):
+    return render(request, "page/home.html")
+
+def remove_img_background(request):
+    return render(request, "page/removebg.html")
+
+def addwatermark(request):
     if request.method == "POST":
 
         img = request.FILES["image"]
@@ -51,4 +57,4 @@ def removewatermark(request):
         im.save("ak.png")
 
       
-    return render(request, "page/home.html")
+    return render(request, "page/watermark.html")

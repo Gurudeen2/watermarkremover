@@ -13,16 +13,12 @@
     </div>
     <div class="row">
       <div class="col">
-        <input
-          type="button"
-          class="btn btn-danger btn-sm"
-          value="Add Watermark"
-        />
-        <input
-          type="button"
-          class="btn btn-success btn-sm"
-          value="Remove Image Background"
-        />
+        <a href="{% url 'addwatermark' %}" class="btn btn-danger btn-sm"
+          >Add Watermark</a
+        >
+        <a href="{% url 'removebgimg' %}" class="btn btn-success btn-sm"
+          >Remove Image Background</a
+        >
       </div>
     </div>
   </div>
