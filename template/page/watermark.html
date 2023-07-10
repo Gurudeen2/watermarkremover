@@ -3,15 +3,17 @@ image {% endblock %} {% block content %}
 <div class="container py-4">
   <div class="row">
     <div class="col">
-      <form action="" method="post">
+      <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
         <div class="mb-3">
           <label for="formGroupExampleInput" class="form-label">Text</label>
           <input
             type="text"
             class="form-control"
+            name="text"
             id="formGroupExampleInput"
             placeholder="Text for Watermark"
+            required
           />
         </div>
         <div class="mb-3">
@@ -19,8 +21,8 @@ image {% endblock %} {% block content %}
           <input
             class="form-control"
             type="file"
+            
             id="formFileMultiple"
-            multiple
             name="image"
             required
             accept="image/*"
@@ -33,6 +35,7 @@ image {% endblock %} {% block content %}
     </div>
 
     <div class="col">
+      {{wimage.size}}
       <img
         src="{% static 'img/bg2.jpg' %}"
         alt="watermarked-image"
