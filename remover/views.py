@@ -1,15 +1,11 @@
-import sys
 from django.shortcuts import render
-from django.http import HttpResponse
 import cv2
 from .models import WaterMarkRemove
-from datetime import date
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-from io import BytesIO
 import os
 from django.core.files import File
-# fr
+import shutil
 
 # Create your views here.
 
@@ -49,7 +45,11 @@ def inpaint(image, mask):
     return inpainted_image
 
 def home(request):
-    # WaterMarkRemove.objects.all().delete()
+    if os.path.exists("media/photo"):
+        shutil.rmtree('media/photo')
+
+    if WaterMarkRemove.objects.exists():
+        WaterMarkRemove.objects.all().delete()
     return render(request, "page/home.html")
 
 def remove_img_background(request):
@@ -89,8 +89,8 @@ def addwatermark(request):
         # im.show()
         # bufferpng = BytesIO()
 
-        im.save("media/"+filename[0]+"."+im.format)
-        l_img = open(f'media/{filename[0]}.{im.format}', "rb")
+        im.save("media/photo"+filename[0]+"."+im.format)
+        l_img = open(f'media/photo{filename[0]}.{im.format}', "rb")
         convert_img_to_file = File(l_img)
         watermark.photo.save(filename[0]+"."+im.format, convert_img_to_file)
 
