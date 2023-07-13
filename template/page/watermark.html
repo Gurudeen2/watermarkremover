@@ -21,7 +21,6 @@ image {% endblock %} {% block content %}
           <input
             class="form-control"
             type="file"
-            
             id="formFileMultiple"
             name="image"
             required
@@ -35,12 +34,8 @@ image {% endblock %} {% block content %}
     </div>
 
     <div class="col">
-      {{wimage.size}}
-      <img
-        src="{% static 'img/bg2.jpg' %}"
-        alt="watermarked-image"
-        width="100%"
-      />
+      {% if wimage %} {{wimage.url}} {% endif %}
+      <img src="{{wimage.url}}" alt="watermarked-image" width="100%" />
     </div>
   </div>
 </div>

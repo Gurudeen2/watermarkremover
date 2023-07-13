@@ -1,5 +1,6 @@
 import sys
 from django.shortcuts import render
+from django.http import HttpResponse
 import cv2
 from .models import WaterMarkRemove
 from datetime import date
@@ -7,24 +8,16 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 import base64
+from django.core.files.base import File
 
 # Create your views here.
 
-#  photo = Image.open(self.image.path)
-#         draw = ImageDraw.Draw(photo)
-#         font = ImageFont.load_default()
-#         width, height = photo.size
-#         myword = "Hello world !"
-#         margin = 10
-#         textwidth, textheight = draw.textsize(myword, font)
-#         x = width - textwidth - margin
-#         y = height - textheight - margin
-#         draw.text((x,y), myword, (255, 255, 255), font=font)
-#         photo.save(self.image.path)
 def remove_watermark(img_path):
     image = cv2.imread(img_path)
 
-    im = cv2.imread(sys.path[0]+"/img.jpg", 1)
+    print("path needed",img_path)
+
+    # im = cv2.imread(sys.path[0]+"/a.jpg", 1)
     #convert BGR image to RGB(if necessary)
     img_rgb = cv2.cvtColor(image, cv2.COLOR_BayerGB2RGB)
 
@@ -55,7 +48,7 @@ def inpaint(image, mask):
     return inpainted_image
 
 def home(request):
-    print("home la wa")
+    WaterMarkRemove.objects.all().delete()
     return render(request, "page/home.html")
 
 def remove_img_background(request):
@@ -67,11 +60,7 @@ def addwatermark(request):
         img = request.FILES["image"]
         word = request.POST["text"]
 
-        print("img", img)
-        m = "media/photo/84455cover.jpg"
-        # u = Image.open(m)
-        # u.show()
-        remove_watermark(m)
+
 
         # img = str(img)
         # watermark = WaterMarkRemove.objects.create(photo=img)
@@ -80,7 +69,8 @@ def addwatermark(request):
         # today = date.today().strftime("%Y/%m/%d")
         # get_img = WaterMarkRemove.objects.filter(photo=f"photo/{today}/{img}").first().photo
 
-
+# add text to image
+        print("image", img)
         im = Image.open(img)
         width, height = im.size
 
@@ -93,14 +83,25 @@ def addwatermark(request):
         _, _, w, h, = txt.textbbox((0,0), word, font=font)
         
         draw.text(((width-w-10), (height-h-10)), word,(255,255,255), font=font)
-
+        
+        # im.show()
         bufferpng = BytesIO()
-        im.save(bufferpng, kind="JPEG")
-        img_str = base64.b64encode(bufferpng.getvalue()).decode('utf-8')
+        im.save(bufferpng,im.format)
+        
+
+        # print("images", WaterMarkRemove.objects.all())
+        watermark_img = WaterMarkRemove.objects.create(photo=im)
+        watermark_img.save("watermarked.png", File(bufferpng), save=False)
+
+        # # im.save(bufferpng, im.format, quality=60)
+        # print("bytes", WaterMarkRemove.objects.all())
+        # im.save(im.filename, ContentFile(bufferpng.getvalue()), save=True)
+        # im.save(bufferpng, kind=".PNG")
+        # img_str = base64.b64encode(bufferpng.getvalue()).decode('utf-8')
 
         # # img = str(img)
         # #updating the image to db
         # WaterMarkRemove.objects.filter(photo=img).update(photo=im)
       
-        return render(request, "page/watermark.html", context={"wimage":img_str})
+        return render(request, "page/watermark.html", context={"wimage":WaterMarkRemove.objects.all().first().photo})
     return render(request, "page/watermark.html")
