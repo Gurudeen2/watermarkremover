@@ -7,8 +7,9 @@ from datetime import date
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
-import base64
-from django.core.files.base import File
+import os
+from django.core.files import File
+# fr
 
 # Create your views here.
 
@@ -48,7 +49,7 @@ def inpaint(image, mask):
     return inpainted_image
 
 def home(request):
-    WaterMarkRemove.objects.all().delete()
+    # WaterMarkRemove.objects.all().delete()
     return render(request, "page/home.html")
 
 def remove_img_background(request):
@@ -63,15 +64,16 @@ def addwatermark(request):
 
 
         # img = str(img)
-        # watermark = WaterMarkRemove.objects.create(photo=img)
+        watermark = WaterMarkRemove.objects.create()
         # watermark.save()
 
         # today = date.today().strftime("%Y/%m/%d")
         # get_img = WaterMarkRemove.objects.filter(photo=f"photo/{today}/{img}").first().photo
 
 # add text to image
-        print("image", img)
+        filename = str(img).split(".")
         im = Image.open(img)
+        
         width, height = im.size
 
 
@@ -85,13 +87,19 @@ def addwatermark(request):
         draw.text(((width-w-10), (height-h-10)), word,(255,255,255), font=font)
         
         # im.show()
-        bufferpng = BytesIO()
-        im.save(bufferpng,im.format)
+        # bufferpng = BytesIO()
+
+        im.save("media/"+filename[0]+"."+im.format)
+        l_img = open(f'media/{filename[0]}.{im.format}', "rb")
+        convert_img_to_file = File(l_img)
+        watermark.photo.save(filename[0]+"."+im.format, convert_img_to_file)
+
+        
+        
         
 
         # print("images", WaterMarkRemove.objects.all())
-        watermark_img = WaterMarkRemove.objects.create(photo=im)
-        watermark_img.save("watermarked.png", File(bufferpng), save=False)
+        
 
         # # im.save(bufferpng, im.format, quality=60)
         # print("bytes", WaterMarkRemove.objects.all())
