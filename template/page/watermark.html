@@ -34,7 +34,10 @@ image {% endblock %} {% block content %}
     </div>
 
     <div class="col">
+      {% if wimage %}
       <img src="{{wimage.url}}" alt="watermarked-image" width="100%" />
+      <a href="{{wimage.url}}" class="btn btn-success btn-lg">Download Image</a>
+      {% endif %}
     </div>
   </div>
 </div>

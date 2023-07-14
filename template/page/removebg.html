@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Remove from
-image {% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Remove from image
+{% endblock %} {% block content %}
 <div class="container py-4">
   <div class="row">
     <div class="col">
-      <form action="" method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
           <label for="formFileMultiple" class="form-label">Select Image</label>
@@ -11,8 +11,7 @@ image {% endblock %} {% block content %}
             class="form-control"
             type="file"
             id="formFileMultiple"
-
-            name="image"
+            name="removeimg"
             required
             accept="image/*"
           />
@@ -28,12 +27,12 @@ image {% endblock %} {% block content %}
     </div>
 
     <div class="col">
-      
-      <img
-        src="{% static 'img/bg2.jpg' %}"
-        alt="watermarked-image"
-        width="100%"
-      />
+      {% if removebg %}
+      <img src="{{removebg.url}}" alt="watermarked-image" width="100%" />
+      <a href="{{removebg.url}}" class="btn btn-success btn-lg"
+        >Download Image</a
+      >
+      {% endif %}
     </div>
   </div>
 </div>

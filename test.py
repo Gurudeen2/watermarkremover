@@ -1,30 +1,43 @@
-# def fun_max(nums):
+import cv2
+import numpy as np
 
-#     max_num = float("-inf")
-#     for num in nums:
-#         if num > max_num:
-#             max_num+=num
-#     return
+# load image
+img = cv2.imread('person.png')
 
+# convert to graky
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# import requests
+# threshold input image as mask
+mask = cv2.threshold(gray, 250, 255, cv2.THRESH_BINARY)[1]
 
-# url = "https://image-background-removal-v2.p.rapidapi.com/v1.0/transparent-net"
+# negate mask
+mask = 255 - mask
 
-# querystring = {"image":"https://i.pinimg.com/474x/77/7f/c2/777fc24364da5dfc590f196a1ef2cdc5.jpg"}
+# apply morphology to remove isolated extraneous noise
+# use borderconstant of black since foreground touches the edges
+kernel = np.ones((3,3), np.uint8)
+mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
-# payload = {}
-# headers = {
-# 	"content-type": "application/json",
-# 	"X-RapidAPI-Key": "d20a16e73dmsh40a1ef627fe69ebp187596jsn45f113b23412",
-# 	"X-RapidAPI-Host": "image-background-removal-v2.p.rapidapi.com"
-# }
+# anti-alias the mask -- blur then stretch
+# blur alpha channel
+mask = cv2.GaussianBlur(mask, (0,0), sigmaX=2, sigmaY=2, borderType = cv2.BORDER_DEFAULT)
 
-# response = requests.post(url, json=payload, headers=headers, params=querystring)
+# linear stretch so that 127.5 goes to 0, but 255 stays 255
+mask = (2*(mask.astype(np.float32))-255.0).clip(0,255).astype(np.uint8)
 
-# print(response.json())
+# put mask into alpha channel
+result = img.copy()
+result = cv2.cvtColor(result, cv2.COLOR_BGR2BGRA)
+result[:, :, 3] = mask
 
-a = [6,4,7,10,11]
-b = [2,4,6,8,10]
-# c = [x for x in a if x in b]
-print(b**2)
+# save resulting masked image
+cv2.imwrite('person_transp_bckgrnd.png', result)
+
+# display result, though it won't show transparency
+cv2.imshow("INPUT", img)
+cv2.imshow("GRAY", gray)
+cv2.imshow("MASK", mask)
+cv2.imshow("RESULT", result)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
