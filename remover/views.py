@@ -51,6 +51,7 @@ def home(request):
     
     if WaterMarkRemove.objects.exists():
         WaterMarkRemove.objects.all().delete()
+        RemoveBackground.objects.all().delete()
     return render(request, "page/home.html")
 
 def remove_img_background(request):
