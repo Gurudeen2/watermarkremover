@@ -51,6 +51,7 @@ def home(request):
     
     if WaterMarkRemove.objects.exists():
         WaterMarkRemove.objects.all().delete()
+    if RemoveBackground.objects.exists():
         RemoveBackground.objects.all().delete()
     return render(request, "page/home.html")
 
