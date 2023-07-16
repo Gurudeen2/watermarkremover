@@ -1,7 +1,5 @@
 from django.shortcuts import render
-import cv2
 from .models import WaterMarkRemove, RemoveBackground
-import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import os
 from django.core.files import File
@@ -9,50 +7,19 @@ from rembg import remove
 
 # Create your views here.
 
-def remove_watermark(img_path):
-    image = cv2.imread(img_path)
 
 
-    # im = cv2.imread(sys.path[0]+"/a.jpg", 1)
-    #convert BGR image to RGB(if necessary)
-    img_rgb = cv2.cvtColor(image, cv2.COLOR_BayerGB2RGB)
-
-    #perform inpainting to remove the watermark
-    mask = create_watermark_mask(img_rgb)
-    # masked_image = cv2.bitwise_and(img_rgb, img_rgb, mask=mask)
-    #
-    inpainted_img = inpaint(img_rgb, mask)
-
-    #convert the image back to pil image format
-    modified_image = Image.fromarray(inpainted_img)
-    modified_image.show()
-    return modified_image
-
-def create_watermark_mask(image):
-    lower_threshold = np.array([255, 255, 255], dtype=np.uint8)
-    upper_threshold = np.array([255, 255, 255], dtype=np.uint8)
-    mask = cv2.inRange(image, lower_threshold, upper_threshold) 
-    return mask
-
-def inpaint(image, mask):
-    #perform image inpainting using OpenCV's inpaint function
-
-    inpainted_image = cv2.inpaint(image, mask, 3, cv2.INPAINT_TELEA)
-
-    #fiiled
-    # inpainted_image = fill
-    return inpainted_image
 
 def home(request):
-    for file in os.listdir("media/photo"):
-        file_path = os.path.join("media/photo", file)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
+    # for file in os.listdir("media/photo"):
+    #     file_path = os.path.join("media/photo", file)
+    #     if os.path.isfile(file_path):
+    #         os.remove(file_path)
     
-    if WaterMarkRemove.objects.exists():
-        WaterMarkRemove.objects.all().delete()
-    if RemoveBackground.objects.exists():
-        RemoveBackground.objects.all().delete()
+    # if WaterMarkRemove.objects.exists():
+    #     WaterMarkRemove.objects.all().delete()
+    # if RemoveBackground.objects.exists():
+    #     RemoveBackground.objects.all().delete()
     return render(request, "page/home.html")
 
 def remove_img_background(request):
